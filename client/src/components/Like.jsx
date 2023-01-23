@@ -19,7 +19,7 @@ const Like = ({ cat }) => {
   return (
     <div className="card mb-4">
       <div className="card-body">
-        <h4 className="card-title">Other posts you may like</h4>
+        <h4 className="card-title">Similar Post</h4>
         {posts.map((post) => (
           <div className="post" key={post.id}>
             {post.img && <img className="img-fluid" src={`../upload/${post?.img}`} alt="" />}

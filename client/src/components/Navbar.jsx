@@ -24,7 +24,7 @@ const NavbarMenu = () => {
               Blog
             </Nav.Link>
             <Nav.Link as={Link} to="/write">
-              Write
+              Post
             </Nav.Link>
             <NavDropdown title="Categories" id="collasible-nav-dropdown">
               <NavDropdown.Item as={Link} to="/?cat=business">
