@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 const Sider = () => {
   return (
     <>
-      <aside class="sidebar">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h4 class="card-title">About</h4>
-            <p class="card-text">
+      <aside className="sidebar">
+        <div className="card mb-4">
+          <div className="card-body">
+            <h4 className="card-title">About</h4>
+            <p className="card-text">
               Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus,
               sem quam <a href="#">semper libero</a>, sit amet adipiscing sem
               neque sed ipsum.{" "}
@@ -18,26 +18,26 @@ const Sider = () => {
         </div>
       </aside>
 
-      <aside class="sidebar sidebar-sticky">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h4 class="card-title">Categories</h4>
-            <Link class="btn btn-light btn-sm mb-1" to="/?cat=business">
+      <aside className="sidebar sidebar-sticky">
+        <div className="card mb-4">
+          <div className="card-body">
+            <h4 className="card-title">Categories</h4>
+            <Link className="btn btn-light btn-sm mb-1" to="/?cat=business">
               Business
             </Link>
-            <Link class="btn btn-light btn-sm mb-1" to="/?cat=culture">
+            <Link className="btn btn-light btn-sm mb-1" to="/?cat=culture">
               Culture
             </Link>
-            <Link class="btn btn-light btn-sm mb-1" to="/?cat=technology">
+            <Link className="btn btn-light btn-sm mb-1" to="/?cat=technology">
               Technology
             </Link>
-            <Link class="btn btn-light btn-sm mb-1" to="/?cat=quotidian">
+            <Link className="btn btn-light btn-sm mb-1" to="/?cat=quotidian">
               Quotidian
             </Link>
           </div>
         </div>
-        {/* <div class="card mb-4">
-          <div class="card-body">
+        {/* <div className="card mb-4">
+          <div className="card-body">
             <Like />
           </div>
         </div> */}

@@ -17,8 +17,8 @@ const Like = ({ cat }) => {
   }, [cat]);
 
   return (
-    <div class="card mb-4">
-      <div class="card-body">
+    <div className="card mb-4">
+      <div className="card-body">
         <h4 className="card-title">Other posts you may like</h4>
         {posts.map((post) => (
           <div className="post" key={post.id}>

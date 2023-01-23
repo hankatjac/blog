@@ -37,31 +37,30 @@ const Home = () => {
           <div className="col-md-9">
             {posts.map((post) => (
               <div key={post.id} className="card mb-4">
-                {/* <Link className="link" to={`/post/${post.id}`}> */}
-                <h1>{post.title}</h1>
-                {post.img && (
-                  <img
-                    className="img-fluid"
-                    src={`../upload/${post.img}`}
-                    alt=""
-                  />
-                )}
-                {/* </Link> */}
-                <p>{getText(post.desc).substring(0, 200)}...</p>
-                  {/* <p>
-                  {readMore ? getText(post.desc) : `${getText(post.desc).substring(0, 200)}...`}
-
-                </p>
-                <button onClick={() => setReadMore(!readMore)}>
-                  {readMore ? 'show less' : '  read more'}
-                </button> */}
-                <Link className="link" to={`/post/${post.id}`}>
-                  <button>Read More</button>
+                <Link
+                  className="text-muted text-decoration-none"
+                  to={`/post/${post.id}`}
+                >
+                  <h1>{post.title}</h1>
+                  {post.img && (
+                    <img
+                      className="img-fluid"
+                      src={`../upload/${post.img}`}
+                      alt=""
+                    />
+                  )}
                 </Link>
+                <p>{getText(post.desc).substring(0, 200)}</p>
+        
+                {/* <button className="btn btn-sm">
+                  <Link to={`/post/${post.id}`}>
+                    Read More
+                  </Link>
+                </button> */}
               </div>
             ))}
           </div>
-          <div class="col-md-3 ms-auto">
+          <div className="col-md-3 ms-auto">
             <Sider />
           </div>
         </div>

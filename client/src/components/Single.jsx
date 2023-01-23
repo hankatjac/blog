@@ -56,7 +56,7 @@ const Single = () => {
       <div className="row">
         <div className="col-md-9">
           <div className="user">
-                {/* {post.userImg && <img
+            {/* {post.userImg && <img
                 src={post.userImg}
                 alt=""
               />} */}
@@ -74,9 +74,12 @@ const Single = () => {
             )}
           </div>
           <h1>{post.title}</h1>
+          <div>
+            
           {post.img && (
             <img className="img-fluid" src={`../upload/${post?.img}`} alt="" />
           )}
+          </div>
 
           {readMore ? (
             <p
@@ -87,10 +90,11 @@ const Single = () => {
           ) : (
             `${getText(post.desc).substring(0, 200)}...`
           )}
-
-          <button onClick={() => setReadMore(!readMore)}>
-            {readMore ? "show less" : "  show more"}
-          </button>
+          <div >
+            <button onClick={() => setReadMore(!readMore)}>
+              {readMore ? "show less" : "  show more"}
+            </button>
+          </div>
         </div>
 
         <div className="col-md-3 ms-auto">
