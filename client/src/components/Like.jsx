@@ -1,30 +1,48 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const Like = ({ cat }) => {
+const Like = ({ cat, id }) => {
   const [posts, setPosts] = useState([]);
+  const [filterPost, setFilterPost] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/posts/?cat=${cat}`);
         setPosts(res.data);
+        setFilterPost(
+          posts.filter(post => 
+            post.id != id
+          )
+        );
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, [cat]);
+  }, [cat, id, posts]);
 
   return (
     <div className="card mb-4">
       <div className="card-body">
         <h4 className="card-title">Similar Post</h4>
-        {posts.map((post) => (
+        {filterPost.map((post) => (
           <div className="post" key={post.id}>
-            {post.img && <img className="img-fluid" src={`../upload/${post?.img}`} alt="" />}
+            {post.img && (
+              <img
+                className="img-fluid"
+                src={`../upload/${post?.img}`}
+                alt=""
+              />
+            )}
             <h6>{post.title}</h6>
-            <button>Read More</button>
+            <Link
+              className="btn btn-primary btn-sm mb-2"
+              to={`/post/${post.id}`}
+            >
+              Read More
+            </Link>
           </div>
         ))}
       </div>

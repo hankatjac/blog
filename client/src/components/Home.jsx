@@ -32,7 +32,7 @@ const Home = () => {
   return (
     <section className="overflow-hidden pt-4">
       <div className="container">
-        <Hero />
+        <Hero posts={posts} getText={getText}/>
         <div className="row">
           <div className="col-md-9">
             {posts.map((post) => (

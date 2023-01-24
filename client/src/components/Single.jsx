@@ -99,7 +99,7 @@ const Single = () => {
 
         <div className="col-md-3 ms-auto">
           <Sider />
-          <Like cat={post.cat} />
+          <Like cat={post.cat} id ={id}/>
           {/* <Menu cat={post.cat} /> */}
         </div>
       </div>

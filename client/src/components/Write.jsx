@@ -52,7 +52,7 @@ const Write = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (inputRef.current.files.length == 0) {
+    if (inputRef.current.files.length == 0 && !!state == false) {
       setMessage(true);
       return;
     }
@@ -65,7 +65,7 @@ const Write = () => {
             title,
             desc: value,
             cat,
-            img: file ? imgUrl : "",
+            img: file ? imgUrl : state.img,
           })
         : await axios.post(`/posts/`, {
             title,
@@ -193,7 +193,7 @@ const Write = () => {
               <div className="buttons">
                 {/* <button>Save as a draft</button> */}
                 <button type="submit">Publish</button>
-                {err && <div>{err}</div>}
+                {err && <div className="bg-danger text-center">{err}</div>}
               </div>
             </div>
           </div>

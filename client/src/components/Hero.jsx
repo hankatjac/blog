@@ -1,59 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Carousel from "react-bootstrap/Carousel";
+import { Link } from "react-router-dom";
 
-const Hero = () => {
+const Hero = ({ posts, getText }) => {
   const [index, setIndex] = useState(0);
+  const [randomPosts, setRandomPosts] = useState([]);
+
+  useEffect(() => {
+    let random = posts.sort(() => 0.5 - Math.random()).slice(0, 4);
+    setRandomPosts(random);
+  }, [posts]);
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
   };
+
   return (
     //  ======= Hero Slider Section =======
     <div className="pb-4">
       <Carousel activeIndex={index} onSelect={handleSelect}>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src={require("../assets/img/post-slide-6.jpg")}
-            alt="First slide"
-          />
-          <Carousel.Caption>
-            <h3>
-              {" "}
-              17 Pictures of Medium Length Hair in Layers That Will Inspire Your
-              New Haircut
-            </h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src={require("../assets/img/post-slide-1.jpg")}
-            alt="Second slide"
-          />
-
-          <Carousel.Caption>
-            <h3>The Best Homemade Masks for Face (keep the Pimples Away)</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src={require("../assets/img/post-slide-3.jpg")}
-            alt="Third slide"
-          />
-
-          <Carousel.Caption>
-            <h3>
-              13 Amazing Poems from Shel Silverstein with Valuable Life Lessons
-            </h3>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-            </p>
-          </Carousel.Caption>
-        </Carousel.Item>
+        {randomPosts.map((post) => (
+          <Carousel.Item key={post.id}>
+              <Link to={`/post/${post.id}`}>
+              <img
+                className="d-block img-fluid m-auto"
+                src={`../upload/${post.img}`}
+                alt=""
+              />
+          </Link>
+              <Carousel.Caption>
+                <h3> {post.title}</h3>
+                <p>{getText(post.desc).substring(0, 50)}</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+        ))}
       </Carousel>
     </div>
   );
