@@ -18,13 +18,14 @@ const Write = () => {
   const [cat, setCat] = useState(state?.cat || "");
 
   const [err, setError] = useState(null);
-  const [Message, setMessage] = useState(false);
 
+  const [MessageQuill, setMessageQuill] = useState(false);
+  const [Message, setMessage] = useState(false);
   const navigate = useNavigate();
 
   const handleDisplayFileDetails = () => {
-    if (inputRef.current.files[0].size > 1048576)
-      alert("File size cannot exceed more than 1MB");
+    if (inputRef.current.files[0].size > 2 * 1024 * 1024)
+      alert("File size cannot exceed more than 2MB");
     else {
       setFile(inputRef.current.files[0]);
       setUploadedFileName(inputRef.current.files[0].name);
@@ -56,7 +57,13 @@ const Write = () => {
       setMessage(true);
       return;
     }
+
+    if (value.replace(/<(.|\n)*?>/g, "").trim().length === 0) {
+      setMessageQuill(true);
+      return;
+    }
     setMessage(false);
+    setMessageQuill(false);
     const imgUrl = await upload();
 
     try {
@@ -74,6 +81,7 @@ const Write = () => {
             img: file ? imgUrl : "",
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           });
+
       navigate("/");
     } catch (err) {
       setError(err.response.data);
@@ -96,15 +104,16 @@ const Write = () => {
                 required
               />
 
-              <ReactQuill
-                className="h-100"
-                theme="snow"
-                value={value}
-                onChange={setValue}
-              />
+              <ReactQuill theme="snow" value={value} onChange={setValue} />
+
+              {MessageQuill && (
+                <div className="bg-danger text-center m-auto w-25">
+                  Please write some texts
+                </div>
+              )}
             </div>
 
-            <div className="col-md-3">
+            <div className="col-md-3 ">
               {/* <span>
               <b>Status: </b> Draft
               </span>

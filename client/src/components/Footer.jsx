@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../assets/img/logo.png";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -17,29 +17,24 @@ const Footer = () => {
                   officiis qui aliquid blanditiis omnis quae. Explicabo?
                 </p>
                 <p>
-                  <a href="about.html" className="footer-link-more">
+                  <Link href="about.html" className="footer-link-more">
                     Learn More
-                  </a>
+                  </Link>
                 </p>
               </div>
               <div className="col-12 col-md-4">
                 <h3 className="footer-heading">Navigation</h3>
-                <ul className="footer-links list-unstyled">
+                <ul className="footer-links list-unstyled ">
                   <li>
-                    <a href="index.html">
-                      <i className="bi bi-chevron-right"></i> Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="index.html">
+                    <Link to="/">
                       <i className="bi bi-chevron-right"></i> Blog
-                    </a>
+                    </Link>
                   </li>
-              
+
                   <li>
-                    <a href="single-post.html">
+                    <Link to="/write">
                       <i className="bi bi-chevron-right"></i> Write
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -47,25 +42,25 @@ const Footer = () => {
                 <h3 className="footer-heading">Categories</h3>
                 <ul className="footer-links list-unstyled">
                   <li>
-                    <a href="category.html">
+                    <Link to="/?cat=business">
                       <i className="bi bi-chevron-right"></i> Business
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="category.html">
+                    <Link to="/?cat=culture">
                       <i className="bi bi-chevron-right"></i> Culture
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a href="category.html">
+                    <Link to="/?cat=technology">
                       <i className="bi bi-chevron-right"></i> Technology
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="category.html">
+                    <Link to="/?cat=quotidian">
                       <i className="bi bi-chevron-right"></i> Quotidian
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>

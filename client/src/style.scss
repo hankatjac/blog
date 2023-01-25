@@ -11,19 +11,20 @@ $lightGreen: #b9e7e7;
     max-width: 100%;
 
     .card {
-      border-bottom: 1px solid rgba(0,0,0,.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       padding: 10px;
-  }
+    }
     .sidebar-sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-}
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+    }
+    .ql-editor {
+      min-height: 200px;
+    }
     //LOGIN & REGISTER
 
     //NAVBAR
-
-
 
     //FOOTER
 
@@ -37,6 +38,9 @@ $lightGreen: #b9e7e7;
       font-size: 12px;
       img {
         height: 50px;
+      }
+      a {
+        text-decoration: none;
       }
     }
 

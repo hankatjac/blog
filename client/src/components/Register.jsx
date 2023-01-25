@@ -91,7 +91,7 @@ const Register = () => {
               Submit
             </Button>
             {err && <div>{err}</div>}
-          <div className="text-center bg-info">
+          <div className="text-center bg-info w-50 mx-auto">
             Do you have an account? <Link to="/login">Login</Link>
           </div>
           </Form>

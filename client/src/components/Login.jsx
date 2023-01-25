@@ -96,7 +96,7 @@ const Login = () => {
               Submit
             </Button>
             {err && <div>{err}</div>}
-            <div className="bg-info text-center">
+            <div className="text-center bg-info w-50 mx-auto">
               Don't you have an account? <Link to="/register">Register</Link>
             </div>
           </Form>

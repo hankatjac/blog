@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Like = ({ cat, id }) => {
-  const [posts, setPosts] = useState([]);
+ 
   const [filterPost, setFilterPost] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/posts/?cat=${cat}`);
-        setPosts(res.data);
+        let posts = res.data
         setFilterPost(
           posts.filter(post => 
             post.id != id
@@ -21,7 +21,7 @@ const Like = ({ cat, id }) => {
       }
     };
     fetchData();
-  }, [cat, id, posts]);
+  }, [cat, id]);
 
   return (
     <div className="card mb-4">
