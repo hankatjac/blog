@@ -15,7 +15,23 @@ const Footer = () => {
                   Magnam ab, perspiciatis beatae autem deleniti voluptate nulla
                   a dolores, exercitationem eveniet libero laudantium recusandae
                   officiis qui aliquid blanditiis omnis quae. Explicabo?
-                </p>
+                </p>{" "}
+                <div className="position-relative">
+                  <a href="#" className="mx-2">
+                    <span className="bi-facebook"></span>
+                  </a>
+                  <a href="#" className="mx-2">
+                    <span className="bi-twitter"></span>
+                  </a>
+                  <a href="#" className="mx-2">
+                    <span className="bi-instagram"></span>
+                  </a>
+
+                  <a href="#" className="mx-2 js-search-open">
+                    <span className="bi-search"></span>
+                  </a>
+                  <i className="bi bi-list mobile-nav-toggle"></i>
+                </div>{" "}
                 <p>
                   <Link href="about.html" className="footer-link-more">
                     Learn More

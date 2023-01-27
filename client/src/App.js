@@ -11,9 +11,13 @@ import Home from "./components/Home";
 import Single from "./components/Single";
 import NavbarMenu from "./components/Navbar";
 import Footer from "./components/Footer";
+import Search from "./components/Search";
 import "./style.scss";
 
 const Layout = () => {
+
+
+  
   return (
     <>
       <NavbarMenu />
@@ -39,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/write",
         element: <Write />,
+      },
+      {
+        path: "/search",
+        element: <Search />,
       },
       {
         path: "/register",

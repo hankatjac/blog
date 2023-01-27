@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState} from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import Button from "react-bootstrap/Button";
@@ -10,6 +10,11 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 const NavbarMenu = () => {
   const { currentUser, logout } = useContext(AuthContext);
+  const [keyword, setKeyword] = useState('')
+  // const inputRef= useRef()
+
+  const handleChange = (e) =>  setKeyword(e.target.value) 
+  console.log(keyword);
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="secondary" variant="light">
@@ -64,30 +69,16 @@ const NavbarMenu = () => {
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              onChange={handleChange}
+        
             />
-            <Button variant="outline-success">Search</Button>
+            <Link  to='/search' variant="outline-success" state={{ from: keyword }}>Search</Link>
           </Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>
 
-    /* <div class="position-relative">
-        <a href="#" class="mx-2">
-          <span class="bi-facebook"></span>
-        </a>
-        <a href="#" class="mx-2">
-          <span class="bi-twitter"></span>
-        </a>
-        <a href="#" class="mx-2">
-          <span class="bi-instagram"></span>
-        </a>
-
-        <a href="#" class="mx-2 js-search-open">
-          <span class="bi-search"></span>
-        </a>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </div> */
-
+ 
   );
 };
 
