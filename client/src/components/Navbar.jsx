@@ -1,4 +1,4 @@
-import React, { useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import Button from "react-bootstrap/Button";
@@ -10,10 +10,11 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 const NavbarMenu = () => {
   const { currentUser, logout } = useContext(AuthContext);
-  const [keyword, setKeyword] = useState('')
+  const [keyword, setKeyword] = useState("");
   // const inputRef= useRef()
 
-  const handleChange = (e) =>  setKeyword(e.target.value) 
+  const handleChange = (e) => setKeyword(e.target.value.trim().toLowerCase());
+
   console.log(keyword);
 
   return (
@@ -63,22 +64,26 @@ const NavbarMenu = () => {
               Register
             </Nav.Link>
           </Nav>
-          <Form className="d-flex">
+          <div className="d-flex">
             <Form.Control
               type="search"
               placeholder="Search"
               className="me-2"
               aria-label="Search"
               onChange={handleChange}
-        
             />
-            <Link  to='/search' variant="outline-success" state={{ from: keyword }}>Search</Link>
-          </Form>
+            {keyword && <Link
+              className="btn btn-info"
+              to="/search"
+              variant="outline-success"
+              state={{ from: keyword }}
+            >
+              Search
+            </Link>}
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>
-
- 
   );
 };
 

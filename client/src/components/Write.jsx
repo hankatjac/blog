@@ -24,8 +24,8 @@ const Write = () => {
   const navigate = useNavigate();
 
   const handleDisplayFileDetails = () => {
-    if (inputRef.current.files[0].size > 2 * 1024 * 1024)
-      alert("File size cannot exceed more than 2MB");
+    if (inputRef.current.files[0].size > 3 * 1024 * 1024)
+      alert("File size cannot exceed more than 3MB");
     else {
       setFile(inputRef.current.files[0]);
       setUploadedFileName(inputRef.current.files[0].name);
@@ -62,8 +62,7 @@ const Write = () => {
       setMessageQuill(true);
       return;
     }
-    setMessage(false);
-    setMessageQuill(false);
+
     const imgUrl = await upload();
 
     try {
@@ -82,10 +81,15 @@ const Write = () => {
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           });
 
-      navigate("/");
+          setMessage(false);
+          setMessageQuill(false);
+          navigate("/");
+
+   
     } catch (err) {
       setError(err.response.data);
     }
+
   };
 
   return (

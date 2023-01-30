@@ -12,17 +12,18 @@ const Search = () => {
   const [searchedPosts, setSearchedPost] = useState([]);
 
   useEffect(() => {
-    
     const fetchData = async () => {
+      let tempPosts = [];
       try {
         const res = await axios.get("/posts");
 
-        res.data.map(post => {
+        res.data.forEach((post) => {
           // console.log(typeof post.desc);
-          if (post.title.includes(from) ) {
-            setSearchedPost([...searchedPosts, post]);
+          if (post.title.toLowerCase().includes(from)) {
+            tempPosts = [...tempPosts, post];
           }
         });
+        setSearchedPost(tempPosts);
       } catch (err) {
         console.log(err);
       }
@@ -68,7 +69,6 @@ const Search = () => {
       </div>
     </section>
   );
-  
 };
 
 export default Search;
