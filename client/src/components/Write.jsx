@@ -79,19 +79,12 @@ const Write = () => {
             img: file ? imgUrl : "",
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           });
-<<<<<<< HEAD
-=======
-
-          setMessage(false);
-          setMessageQuill(false);
-          navigate("/");
-
-   
->>>>>>> 04f2e050feb1edc18d50e2f1395da1b17fd924e0
     } catch (err) {
       setError(err.response.data);
       return;
     }
+    setMessage(false);
+    setMessageQuill(false);
     navigate("/");
   };
 
