@@ -92,11 +92,7 @@ const Write = () => {
       setError(err.response.data);
       return;
     }
-<<<<<<< HEAD
     navigate("/");
-=======
-
->>>>>>> 04f2e050feb1edc18d50e2f1395da1b17fd924e0
   };
 
   return (
