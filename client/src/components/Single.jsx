@@ -9,15 +9,20 @@ import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import DOMPurify from "dompurify";
 import Sider from "./Sider";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { MdOutlineTextsms } from "react-icons/md";
+import Comments from "./comments/Comments";
 
 const Single = () => {
   const { id } = useParams();
   const [post, setPost] = useState({});
   const [readMore, setReadMore] = useState(false);
+  const [likes, setLikes] = useState([]);
+  const [commentOpen, setCommentOpen] = useState(false);
 
-  const location = useLocation();
   const navigate = useNavigate();
 
+  // const location = useLocation();
   // const postId = location.pathname.split("/")[2];
   // console.log(location.pathname.split("/"))
   console.log(id);
@@ -28,6 +33,18 @@ const Single = () => {
       try {
         const res = await axios.get(`/posts/${id}`);
         setPost(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("/likes?postId=" + post.id);
+        setLikes(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -49,6 +66,15 @@ const Single = () => {
   const getText = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent;
+  };
+
+  const handleLike = () => {
+    if (currentUser) {
+      let liked = likes.includes(currentUser.id);
+      if (liked) return axios.delete("/likes?postId=" + post.id);
+      return axios.post("/likes", { postId: post.id });
+    }
+    alert("Please login");
   };
 
   return (
@@ -75,10 +101,13 @@ const Single = () => {
           </div>
           <h1>{post.title}</h1>
           <div>
-            
-          {post.img && (
-            <img className="img-fluid" src={`../upload/${post?.img}`} alt="" />
-          )}
+            {post.img && (
+              <img
+                className="img-fluid"
+                src={`../upload/${post?.img}`}
+                alt=""
+              />
+            )}
           </div>
 
           {readMore ? (
@@ -90,16 +119,32 @@ const Single = () => {
           ) : (
             `${getText(post.desc).substring(0, 200)}...`
           )}
-          <div >
+          <div>
             <button onClick={() => setReadMore(!readMore)}>
               {readMore ? "show less" : "  show more"}
             </button>
           </div>
+
+          <div className="info">
+            <div className="item">
+              {likes.includes(currentUser.id) ? (
+                <AiOutlineHeart style={{ color: "red" }} onClick={handleLike} />
+              ) : (
+                <AiFillHeart onClick={handleLike} />
+              )}
+              {likes?.length} Likes
+            </div>
+            <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
+              <MdOutlineTextsms />
+              See Comments
+            </div>
+          </div>
+          {commentOpen && <Comments postId={post.id} />}
         </div>
 
         <div className="col-md-3 ms-auto">
           <Sider />
-          <Like cat={post.cat} id ={id}/>
+          <Like cat={post.cat} id={id} />
           {/* <Menu cat={post.cat} /> */}
         </div>
       </div>

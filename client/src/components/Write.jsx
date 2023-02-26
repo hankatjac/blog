@@ -43,7 +43,6 @@ const Write = () => {
       const formData = new FormData();
       formData.append("file", file);
       const res = await axios.post("/upload", formData);
-
       return res.data;
     } catch (err) {
       console.log(err);
@@ -81,11 +80,11 @@ const Write = () => {
             img: file ? imgUrl : "",
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           });
-
-      navigate("/");
     } catch (err) {
       setError(err.response.data);
+      return;
     }
+    navigate("/");
   };
 
   return (
