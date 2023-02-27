@@ -30,8 +30,6 @@ const Single = () => {
 
   const { currentUser, logout } = useContext(AuthContext);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,6 +55,15 @@ const Single = () => {
     fetchData();
   }, [id, fetch]);
 
+  const deleteImage = async () => {
+    try {
+      await axios.delete(`/photos/${post.img}`);
+    } catch (err) {
+      console.log(err);
+      alert(err.response.data.message);
+    }
+  };
+
   const handleDelete = async () => {
     try {
       await axios.delete(`/posts/${id}`);
@@ -70,12 +77,13 @@ const Single = () => {
       }
       return;
     }
+    deleteImage();
   };
 
-  const getText = (html) => {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    return doc.body.textContent;
-  };
+  // const getText = (html) => {
+  //   const doc = new DOMParser().parseFromString(html, "text/html");
+  //   return doc.body.textContent;
+  // };
 
   const handleLike = async () => {
     if (currentUser) {
@@ -125,11 +133,11 @@ const Single = () => {
               />} */}
               <div className="info">
                 <span>{post.username}</span>
-                <p>Posted {moment(post.date).fromNow()}</p>
+                <span>Posted {moment(post.date).fromNow()}</span>
               </div>
               {currentUser?.username === post.username && (
-                <div className="edit">
-                  <Link to={`/write?edit=2`} state={post}>
+                <div>
+                  <Link to={`/write?edit=2`} state={post} className="me-3">
                     <img src={Edit} alt="" />
                   </Link>
                   <img onClick={handleDelete} src={Delete} alt="" />
@@ -154,7 +162,12 @@ const Single = () => {
                 }}
               ></p>
             ) : (
-              `${getText(post.desc).substring(0, 200)}...`
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(post.desc?.substring(0, 500)),
+                }}
+              ></p>
+              // (`${getText(post.desc).substring(0, 200)}...`)
             )}
             <div>
               <button onClick={() => setReadMore(!readMore)}>

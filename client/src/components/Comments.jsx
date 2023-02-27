@@ -40,7 +40,6 @@ const Comments = ({ postId }) => {
         if (err.response.status === 401) {
           logout();
           navigate("/login");
-          return
         }
       }
       return;

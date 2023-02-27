@@ -17,12 +17,12 @@ const Search = () => {
       try {
         const res = await axios.get("/posts");
 
-        res.data.forEach((post) => {
-          // console.log(typeof post.desc);
-          if (post.title.toLowerCase().includes(from)) {
-            tempPosts = [...tempPosts, post];
-          }
-        });
+        tempPosts = res.data.filter(
+          (post) =>
+            post.title.toLowerCase().includes(from) ||
+            post.desc.toLowerCase().includes(from)
+        );
+
         setSearchedPost(tempPosts);
       } catch (err) {
         console.log(err);

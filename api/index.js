@@ -6,6 +6,7 @@ import commentRoutes from "./routes/comments.js";
 import likeRoutes from "./routes/likes.js";
 import cookieParser from "cookie-parser";
 import multer from "multer";
+import fs from 'fs';
 
 // require("dotenv").config();
 
@@ -18,7 +19,8 @@ const storage = multer.diskStorage({
     cb(null, "../client/public/upload");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname);
+    cb(null, file.originalname);
+    // cb(null, Date.now() + file.originalname);
   },
 });
 
@@ -27,6 +29,23 @@ const upload = multer({ storage });
 app.post("/api/upload", upload.single("photo"), function (req, res) {
   const file = req.file;
   res.status(200).json(file.filename);
+});
+
+app.delete("/api/photos/:imgname", (req, res) => {
+  const fileName = req.params.imgname;
+  const directoryPath = "../client/public/upload/";
+
+  fs.unlink(directoryPath + fileName, (err) => {
+    if (err) {
+      res.status(500).send({
+        message: "Could not delete the file. " + err,
+      });
+    }
+
+    res.status(200).send({
+      message: "File is deleted.",
+    });
+  });
 });
 
 app.use("/api/auth", authRoutes);
