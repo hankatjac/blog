@@ -1,12 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import Form from "react-bootstrap/Form";
+import { AuthContext } from "../context/authContext";
 
 const Write = () => {
+  const { logout } = useContext(AuthContext);
   const [uploadedFileName, setUploadedFileName] = useState(null);
   const inputRef = useRef(null);
   const state = useLocation().state;
@@ -17,10 +19,10 @@ const Write = () => {
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState(state?.cat || "");
 
-  const [err, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
-  const [MessageQuill, setMessageQuill] = useState(false);
-  const [Message, setMessage] = useState(false);
+  const [messageQuill, setMessageQuill] = useState(false);
+  const [message, setMessage] = useState(false);
   const navigate = useNavigate();
 
   const handleDisplayFileDetails = () => {
@@ -29,7 +31,6 @@ const Write = () => {
     else {
       setFile(inputRef.current.files[0]);
       setUploadedFileName(inputRef.current.files[0].name);
-      setMessage(false);
     }
   };
 
@@ -41,17 +42,20 @@ const Write = () => {
   const upload = async () => {
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("photo", file);
       const res = await axios.post("/upload", formData);
       return res.data;
     } catch (err) {
       console.log(err);
-      // alert("File Upload Error");
+      !state && alert("File Upload Error");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const imgUrl = await upload();
+    console.log(imgUrl);
+
     if (inputRef.current.files.length == 0 && !!state == false) {
       setMessage(true);
       return;
@@ -61,8 +65,6 @@ const Write = () => {
       setMessageQuill(true);
       return;
     }
-
-    const imgUrl = await upload();
 
     try {
       state
@@ -79,13 +81,18 @@ const Write = () => {
             img: file ? imgUrl : "",
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           });
+
+      setMessage(false);
+      setMessageQuill(false);
+      navigate("/");
     } catch (err) {
-      setError(err.response.data);
-      return;
+      console.log(err);
+
+      if (err.response.status === 401) {
+        logout();
+        navigate("/login");
+      }
     }
-    setMessage(false);
-    setMessageQuill(false);
-    navigate("/");
   };
 
   return (
@@ -106,7 +113,7 @@ const Write = () => {
 
               <ReactQuill theme="snow" value={value} onChange={setValue} />
 
-              {MessageQuill && (
+              {messageQuill && (
                 <div className="bg-danger text-center m-auto w-25">
                   Please write some texts
                 </div>
@@ -128,6 +135,7 @@ const Write = () => {
                   onChange={handleDisplayFileDetails}
                   className="d-none"
                   type="file"
+                  accept="image/*"
                 />
 
                 <button
@@ -138,7 +146,7 @@ const Write = () => {
                 >
                   {uploadedFileName ? uploadedFileName : "Upload"}
                 </button>
-                {Message && (
+                {message && (
                   <div className="bg-danger">Please upload a picture</div>
                 )}
 
@@ -202,7 +210,7 @@ const Write = () => {
               <div className="buttons">
                 {/* <button>Save as a draft</button> */}
                 <button type="submit">Publish</button>
-                {err && <div className="bg-danger text-center">{err}</div>}
+                {/* {error && <div className="bg-danger text-center">{error}</div>} */}
               </div>
             </div>
           </div>

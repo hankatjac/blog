@@ -1,4 +1,4 @@
-import { db } from "../connect.js";
+import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
 export const getLikes = (req,res)=>{
@@ -11,10 +11,10 @@ export const getLikes = (req,res)=>{
 }
 
 export const addLike = (req, res) => {
-  const token = req.cookies.accessToken;
+  const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, "jwtkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const q = "INSERT INTO likes (`userId`,`postId`) VALUES (?)";
@@ -32,10 +32,10 @@ export const addLike = (req, res) => {
 
 export const deleteLike = (req, res) => {
 
-  const token = req.cookies.accessToken;
+  const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, "jwtkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const q = "DELETE FROM likes WHERE `userId` = ? AND `postId` = ?";

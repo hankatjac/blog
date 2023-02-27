@@ -1,31 +1,48 @@
-import { useContext, useState } from "react";
-import "./comments.scss";
-import { AuthContext } from "../../context/authContext";
+import { useContext, useState, useEffect } from "react";
+import { AuthContext } from "../context/authContext";
 // import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const Comments = ({ postId }) => {
   const [desc, setDesc] = useState("");
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, logout } = useContext(AuthContext);
   const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
+  const [fetch, setFetch] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        axios.get("/comments?postId=" + postId);
+        const res = await axios.get("/comments?postId=" + postId);
         setComments(res.data);
+        setFetch(false);
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, [id]);
+  }, [postId, fetch]);
+
+  console.log(comments);
 
   const handleClick = async (e) => {
     if (currentUser) {
       e.preventDefault();
-      axios.post("/comments", { desc, postId });
-      setDesc("");
+      try {
+        await axios.post("/comments", { desc, postId });
+        setDesc("");
+        setFetch(true);
+      } catch (err) {
+        console.log(err);
+        alert(err.response.data);
+        if (err.response.status === 401) {
+          logout();
+          navigate("/login");
+          return
+        }
+      }
       return;
     }
     alert("Please login");
@@ -34,7 +51,7 @@ const Comments = ({ postId }) => {
   return (
     <div className="comments">
       <div className="write">
-        <img src={"/upload/" + currentUser.profilePic} alt="" />
+        {/* <img src={"/upload/" + currentUser.profilePic} alt="" /> */}
         <input
           type="text"
           placeholder="write a comment"
@@ -44,8 +61,8 @@ const Comments = ({ postId }) => {
         <button onClick={handleClick}>Send</button>
       </div>
 
-      {comments.map((comment) => (
-        <div className="comment">
+      {comments?.map((comment) => (
+        <div key={comment.id} className="comment">
           {/* <img src={"/upload/" + comment.profilePic} alt="" /> */}
           <div className="info">
             <span>{comment.username}</span>

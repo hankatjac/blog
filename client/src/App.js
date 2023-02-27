@@ -15,9 +15,6 @@ import Search from "./components/Search";
 import "./style.scss";
 
 const Layout = () => {
-
-
-  
   return (
     <>
       <NavbarMenu />

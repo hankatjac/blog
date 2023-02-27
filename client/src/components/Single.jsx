@@ -11,7 +11,8 @@ import DOMPurify from "dompurify";
 import Sider from "./Sider";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { MdOutlineTextsms } from "react-icons/md";
-import Comments from "./comments/Comments";
+import Comments from "./Comments";
+import { IconContext } from "react-icons";
 
 const Single = () => {
   const { id } = useParams();
@@ -19,14 +20,17 @@ const Single = () => {
   const [readMore, setReadMore] = useState(false);
   const [likes, setLikes] = useState([]);
   const [commentOpen, setCommentOpen] = useState(false);
+  const [fetch, setFetch] = useState(true);
 
   const navigate = useNavigate();
 
   // const location = useLocation();
   // const postId = location.pathname.split("/")[2];
   // console.log(location.pathname.split("/"))
-  console.log(id);
-  const { currentUser } = useContext(AuthContext);
+
+  const { currentUser, logout } = useContext(AuthContext);
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,16 +47,15 @@ const Single = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("/likes?postId=" + post.id);
+        const res = await axios.get("/likes?postId=" + id);
         setLikes(res.data);
       } catch (err) {
         console.log(err);
       }
+      setFetch(false);
     };
     fetchData();
-  }, [id]);
-
-  console.log(post.username);
+  }, [id, fetch]);
 
   const handleDelete = async () => {
     try {
@@ -60,6 +63,12 @@ const Single = () => {
       navigate("/");
     } catch (err) {
       console.log(err);
+      alert(err.response.data);
+      if (err.response.status === 401) {
+        logout();
+        navigate("/login");
+      }
+      return;
     }
   };
 
@@ -68,87 +77,121 @@ const Single = () => {
     return doc.body.textContent;
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (currentUser) {
       let liked = likes.includes(currentUser.id);
-      if (liked) return axios.delete("/likes?postId=" + post.id);
-      return axios.post("/likes", { postId: post.id });
+      console.log(liked);
+      if (liked) {
+        try {
+          await axios.delete("/likes?postId=" + id);
+          setFetch(true);
+        } catch (err) {
+          console.log(err);
+          alert(err.response.data);
+          if (err.response.status === 401) {
+            logout();
+            navigate("/login");
+          }
+          return;
+        }
+      } else {
+        try {
+          await axios.post("/likes", { postId: id });
+          setFetch(true);
+        } catch (err) {
+          console.log(err);
+          alert(err.response.data);
+          if (err.response.status === 401) {
+            logout();
+            navigate("/login");
+          }
+          return;
+        }
+      }
+      return;
     }
     alert("Please login");
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-9">
-          <div className="user">
-            {/* {post.userImg && <img
+    <section>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8">
+            <div className="user">
+              {/* {post.userImg && <img
                 src={post.userImg}
                 alt=""
               />} */}
-            <div className="info">
-              <span>{post.username}</span>
-              <p>Posted {moment(post.date).fromNow()}</p>
-            </div>
-            {currentUser?.username === post.username && (
-              <div className="edit">
-                <Link to={`/write?edit=2`} state={post}>
-                  <img src={Edit} alt="" />
-                </Link>
-                <img onClick={handleDelete} src={Delete} alt="" />
+              <div className="info">
+                <span>{post.username}</span>
+                <p>Posted {moment(post.date).fromNow()}</p>
               </div>
-            )}
-          </div>
-          <h1>{post.title}</h1>
-          <div>
-            {post.img && (
-              <img
-                className="img-fluid"
-                src={`../upload/${post?.img}`}
-                alt=""
-              />
-            )}
-          </div>
-
-          {readMore ? (
-            <p
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(post.desc),
-              }}
-            ></p>
-          ) : (
-            `${getText(post.desc).substring(0, 200)}...`
-          )}
-          <div>
-            <button onClick={() => setReadMore(!readMore)}>
-              {readMore ? "show less" : "  show more"}
-            </button>
-          </div>
-
-          <div className="info">
-            <div className="item">
-              {likes.includes(currentUser.id) ? (
-                <AiOutlineHeart style={{ color: "red" }} onClick={handleLike} />
-              ) : (
-                <AiFillHeart onClick={handleLike} />
+              {currentUser?.username === post.username && (
+                <div className="edit">
+                  <Link to={`/write?edit=2`} state={post}>
+                    <img src={Edit} alt="" />
+                  </Link>
+                  <img onClick={handleDelete} src={Delete} alt="" />
+                </div>
               )}
-              {likes?.length} Likes
             </div>
-            <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
-              <MdOutlineTextsms />
-              See Comments
+            <h1>{post.title}</h1>
+            <div>
+              {post.img && (
+                <img
+                  className="img-fluid"
+                  src={`../upload/${post?.img}`}
+                  alt=""
+                />
+              )}
             </div>
-          </div>
-          {commentOpen && <Comments postId={post.id} />}
-        </div>
 
-        <div className="col-md-3 ms-auto">
-          <Sider />
-          <Like cat={post.cat} id={id} />
-          {/* <Menu cat={post.cat} /> */}
+            {readMore ? (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(post.desc),
+                }}
+              ></p>
+            ) : (
+              `${getText(post.desc).substring(0, 200)}...`
+            )}
+            <div>
+              <button onClick={() => setReadMore(!readMore)}>
+                {readMore ? "show less" : "  show more"}
+              </button>
+            </div>
+
+            <div className="info">
+              <IconContext.Provider value={{ color: "red" }}>
+                <div className="item">
+                  {likes.includes(currentUser?.id) ? (
+                    <AiFillHeart onClick={handleLike} />
+                  ) : (
+                    <AiOutlineHeart onClick={handleLike} />
+                  )}
+                  {likes?.length} Likes
+                </div>
+              </IconContext.Provider>
+              <div
+                className="item"
+                onClick={() => setCommentOpen(!commentOpen)}
+              >
+                <MdOutlineTextsms />
+                See Comments
+              </div>
+            </div>
+            {commentOpen && <Comments postId={id} />}
+          </div>
+
+          <div className="col-md-3 ms-auto">
+            <Sider />
+            <Like cat={post.cat} id={id} />
+            {/* <Menu cat={post.cat} /> */}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

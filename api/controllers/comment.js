@@ -1,9 +1,9 @@
-import { db } from "../connect.js";
+import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 import moment from "moment";
 
 export const getComments = (req, res) => {
-  const q = `SELECT c.*,  username FROM comments AS c JOIN users AS u ON (u.id = c.userId)
+  const q = `SELECT c.*,  u.username FROM comments AS c JOIN users AS u ON (u.id = c.userId)
     WHERE c.postId = ? ORDER BY c.createdAt DESC
     `;
 
@@ -14,10 +14,10 @@ export const getComments = (req, res) => {
 };
 
 export const addComment = (req, res) => {
-  const token = req.cookies.accessToken;
+  const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, "jwtkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const q = "INSERT INTO comments(`desc`, `createdAt`, `userId`, `postId`) VALUES (?)";
