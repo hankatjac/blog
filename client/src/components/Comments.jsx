@@ -49,16 +49,19 @@ const Comments = ({ postId }) => {
 
   return (
     <div className="comments">
-      <div className="write">
+ 
         {/* <img src={"/upload/" + currentUser.profilePic} alt="" /> */}
-        <input
-          type="text"
-          placeholder="write a comment"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-        />
-        <button onClick={handleClick}>Send</button>
-      </div>
+        <form onSubmit={handleClick} className="write">
+          <input
+            type="text"
+            placeholder="write a comment"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+  
 
       {comments?.map((comment) => (
         <div key={comment.id} className="comment">
