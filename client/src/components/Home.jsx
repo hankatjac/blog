@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import Hero from "./Hero";
 import axios from "axios";
 import Sider from "./Sider";
+import DOMPurify from "dompurify";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -32,7 +33,7 @@ const Home = () => {
   return (
     <section className="overflow-hidden pt-4">
       <div className="container">
-        <Hero posts={posts} getText={getText}/>
+        <Hero posts={posts} getText={getText} />
         <div className="row">
           <div className="col-md-9">
             {posts.map((post) => (
@@ -50,8 +51,14 @@ const Home = () => {
                     />
                   )}
                 </Link>
-                <p>{getText(post.desc).substring(0, 200)}</p>
-        
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      DOMPurify.sanitize(post.desc?.substring(0, 200)) + "...",
+                  }}
+                ></p>
+                {/* <p>{getText(post.desc).substring(0, 200)}</p> */}
+
                 {/* <button className="btn btn-sm">
                   <Link to={`/post/${post.id}`}>
                     Read More
