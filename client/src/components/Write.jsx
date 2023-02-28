@@ -81,13 +81,11 @@ const Write = () => {
             img: file ? imgUrl : "",
             date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           });
-
       setMessage(false);
       setMessageQuill(false);
       navigate("/");
     } catch (err) {
       console.log(err);
-
       if (err.response.status === 401) {
         logout();
         navigate("/login");
