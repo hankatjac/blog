@@ -21,18 +21,18 @@ const Hero = ({ posts, getText }) => {
       <Carousel activeIndex={index} onSelect={handleSelect}>
         {randomPosts.map((post) => (
           <Carousel.Item key={post.id}>
-              <Link to={`/post/${post.id}`}>
-              <img
-                className="d-block img-fluid m-auto"
-                src={`../upload/${post.img}`}
-                alt=""
-              />
-          </Link>
+            <img
+              className="d-block img-fluid m-auto"
+              src={`../upload/${post.img}`}
+              alt=""
+            />
+            <Link to={`/post/${post.id}`}>
               <Carousel.Caption>
                 <h3> {post.title}</h3>
                 <p>{getText(post.desc).substring(0, 50)}</p>
               </Carousel.Caption>
-            </Carousel.Item>
+            </Link>
+          </Carousel.Item>
         ))}
       </Carousel>
     </div>
