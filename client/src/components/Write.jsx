@@ -8,7 +8,7 @@ import Form from "react-bootstrap/Form";
 import { AuthContext } from "../context/authContext";
 
 const Write = () => {
-  const { logout } = useContext(AuthContext);
+  const { logout, deleteImage } = useContext(AuthContext);
   const [uploadedFileName, setUploadedFileName] = useState(null);
   const inputRef = useRef(null);
   const state = useLocation().state;
@@ -66,29 +66,43 @@ const Write = () => {
       return;
     }
 
-    try {
-      state
-        ? await axios.put(`/posts/${state.id}`, {
-            title,
-            desc: value,
-            cat,
-            img: file ? imgUrl : state.img,
-          })
-        : await axios.post(`/posts/`, {
-            title,
-            desc: value,
-            cat,
-            img: file ? imgUrl : "",
-            date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-          });
-      setMessage(false);
-      setMessageQuill(false);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-      if (err.response.status === 401) {
-        logout();
-        navigate("/login");
+    if (state) {
+      try {
+        await axios.put(`/posts/${state.id}`, {
+          title,
+          desc: value,
+          cat,
+          img: file ? imgUrl : state.img,
+        });
+        file && deleteImage(state.img);
+        setMessage(false);
+        setMessageQuill(false);
+        navigate("/");
+      } catch (err) {
+        console.log(err);
+        if (err.response.status === 401) {
+          logout();
+          navigate("/login");
+        }
+      }
+    } else {
+      try {
+        await axios.post(`/posts/`, {
+          title,
+          desc: value,
+          cat,
+          img: file ? imgUrl : "",
+          date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+        });
+        setMessage(false);
+        setMessageQuill(false);
+        navigate("/");
+      } catch (err) {
+        console.log(err);
+        if (err.response.status === 401) {
+          logout();
+          navigate("/login");
+        }
       }
     }
   };

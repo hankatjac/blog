@@ -28,7 +28,7 @@ const Single = () => {
   // const postId = location.pathname.split("/")[2];
   // console.log(location.pathname.split("/"))
 
-  const { currentUser, logout } = useContext(AuthContext);
+  const { currentUser, logout, deleteImage } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,14 +55,14 @@ const Single = () => {
     fetchData();
   }, [id, fetch]);
 
-  const deleteImage = async () => {
-    try {
-      await axios.delete(`/photos/${post.img}`);
-    } catch (err) {
-      console.log(err);
-      alert(err.response.data.message);
-    }
-  };
+  // const deleteImage = async () => {
+  //   try {
+  //     await axios.delete(`/photos/${post.img}`);
+  //   } catch (err) {
+  //     console.log(err);
+  //     alert(err.response.data.message);
+  //   }
+  // };
 
   const handleDelete = async () => {
     try {
@@ -77,7 +77,7 @@ const Single = () => {
       }
       return;
     }
-    deleteImage();
+    deleteImage(post.img);
   };
 
   // const getText = (html) => {
@@ -137,7 +137,7 @@ const Single = () => {
               </div>
               {currentUser?.username === post.username && (
                 <div>
-                  <Link to={`/write?edit=2`} state={post} className="me-3">
+                  <Link to={`/write?edit=${id}`} state={post} className="me-3">
                     <img src={Edit} alt="" />
                   </Link>
                   <img onClick={handleDelete} src={Delete} alt="" />
