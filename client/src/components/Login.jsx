@@ -91,7 +91,7 @@ const Login = () => {
               </InputGroup>
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant="outline-primary" type="submit" className="d-block mx-auto">
               Submit
             </Button>
             {err && <div>{err}</div>}
